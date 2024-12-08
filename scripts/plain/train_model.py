@@ -66,7 +66,7 @@ vec_size = 400
 
 net_major_batch_size = 5000
 net_minor_batch_size = 64
-net_epochs = 3
+net_epochs = 5
 net_window_size = 4
 net_hidden_layer_size = 500
 net_hidden_layer_count = 5
@@ -79,15 +79,15 @@ os.environ['TF_GPU_ALLOCATOR'] = 'cuda_malloc_async'
 tokens = []
 
 print("Loading dataset.")
-with open(os.path.dirname(__file__) + "/../../output/" + directory_name + "/Tokens/" + corpus_name + "-tokens.json", "r", encoding = 'utf-8') as f:
+with open(os.path.dirname(__file__) + "/../../output/" + directory_name + "/" + corpus_name + "-tokens.json", "r", encoding = 'utf-8') as f:
 	tokens = json.load(f)
 
 print("Loading merge rules.")
-with open(os.path.dirname(__file__) + "/../../output/" + directory_name + "/Merge_Rules/" + corpus_name + "-merge_rules.json", "r", encoding = 'utf-8') as f:
+with open(os.path.dirname(__file__) + "/../../output/" + directory_name + "/" + corpus_name + "-merge_rules.json", "r", encoding = 'utf-8') as f:
 	merge_rules = json.load(f)
 
 print("Loading embeddings.")
-vectors = KeyedVectors.load(os.path.dirname(__file__) + "/../../output/" + directory_name + "/Embeddings/bod_bp.vectors", mmap='r')
+vectors = KeyedVectors.load(os.path.dirname(__file__) + "/../../output/" + directory_name + "/bod_bp.vectors", mmap='r')
 
 ####################################################################################################
 
@@ -197,7 +197,7 @@ results = seg_model.evaluate(x_test, y_test, batch_size=64)
 
 print("Saving model.")
 
-seg_model.save(os.path.dirname(__file__) + "/../../output/" + directory_name + "/Model/bod_bp_seg.keras")
+seg_model.save(os.path.dirname(__file__) + "/../../output/" + directory_name + "/bod_bp_seg.keras")
 
 print("Job done.")
 

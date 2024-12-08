@@ -22,7 +22,7 @@ corpus_name = "cleaned_actib_corpus"
 byte_pairs = []
 
 print("Loading dataset.")
-with open(os.path.dirname(__file__) + "/../../datasets/" + directory_name + "/Byte_Pairs/" + corpus_name + "-byte_pairs.json", "r", encoding = 'utf-8') as f:
+with open(os.path.dirname(__file__) + "/../../output/" + directory_name + "/" + corpus_name + "-byte_pairs.json", "r", encoding = 'utf-8') as f:
 	byte_pairs = json.load(f)
 print()
 print("Preparing model.")
@@ -35,10 +35,10 @@ vec_model.build_vocab(byte_pairs, progress_per=10000)
 print("Training.")
 vec_model.train(byte_pairs, total_examples=vec_model.corpus_count, epochs=vec_epochs, report_delay=1)
 
-vec_model.save(os.path.dirname(__file__) + "/../../output/" + directory_name + "/Embeddings/bod_bp_vectors.model")
+vec_model.save(os.path.dirname(__file__) + "/../../output/" + directory_name + "/bod_bp_vectors.model")
 
 sylvecs = vec_model.wv
-sylvecs.save(os.path.dirname(__file__) + "/../../output/" + directory_name + "/Embeddings/bod_bp.vectors")
-sylvecs.save_word2vec_format(os.path.dirname(__file__) + "/../../output/" + directory_name + "/Embeddings/bod_bp_vectors.txt", binary=False, write_header=False)
+sylvecs.save(os.path.dirname(__file__) + "/../../output/" + directory_name + "/bod_bp.vectors")
+sylvecs.save_word2vec_format(os.path.dirname(__file__) + "/../../output/" + directory_name + "/bod_bp_vectors.txt", binary=False, write_header=False)
 
 ####################################################################################################

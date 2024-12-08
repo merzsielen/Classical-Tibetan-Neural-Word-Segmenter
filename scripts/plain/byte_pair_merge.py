@@ -132,7 +132,7 @@ def GenerateRules(tokens, pair_iterations):
 
 ####################################################################################################
 
-directory_name = "Cleaned_ACTib_Test"
+directory_name = "Cleaned_ACTib_Full"
 corpus_name = "cleaned_actib_corpus"
 pair_iterations = 500
 
