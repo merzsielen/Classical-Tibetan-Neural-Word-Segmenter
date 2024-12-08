@@ -47,11 +47,11 @@ def IsInUnicodeRange(c, start, end):
 
 def BPM(corpus, num_merges):
 
-	merge_rules = {}
+	merge_rules = []
 
 	for n in range(num_merges):
 		frequency_dictionary = {}
-
+		print('\r' + str(n) + " / " + str(num_merges), end = '')
 		for sentence in corpus:
 			
 			if (len(sentence) == 0): continue
@@ -81,7 +81,7 @@ def BPM(corpus, num_merges):
 				most_frequent_comb = k[0] + k[1]
 				max_frequency = frequency_dictionary[k]
 
-		merge_rules[most_frequent_pair] = most_frequent_comb
+		merge_rules.append(most_frequent_pair)
 
 		output = []
 		for sentence in corpus:
@@ -116,38 +116,40 @@ def BPM(corpus, num_merges):
 		corpus = output
 	return corpus, merge_rules
 
-# Takes tokens, pairs them a certain number of iterations, and spits out paired tokens.
-def PrepareBytePairs(tokens, pair_iterations):
-
-	# First, we separate out each sentence into a vector of characters. Then we iteratively
-	# merge these based on frequency.
-
-	paired_tokens = []
+def Atomize(tokens):
+	new_tokens = []
 	for s in tokens:
 		inner = []
 		sentence = Flatten(s)
 		for c in sentence:
 			inner.append(c)
-		paired_tokens.append(inner)
+		new_tokens.append(inner)
+	return new_tokens
 
-	paired_tokens, pair_rules = BPM(paired_tokens, pair_iterations)
-
-	return paired_tokens
+# Takes tokens, pairs them a certain number of iterations, and spits out paired tokens and rules.
+def GenerateRules(tokens, pair_iterations):
+	return BPM(Atomize(tokens), pair_iterations)
 
 ####################################################################################################
 
-file_name = "cleaned_actib_corpus"
+directory_name = "Cleaned_ACTib_Test"
+corpus_name = "cleaned_actib_corpus"
 pair_iterations = 500
 
 ####################################################################################################
 
-text = open(os.path.dirname(__file__) + "/../datasets/" + file_name + ".txt", "r", encoding = 'utf-8')
+print("---------------------------")
+print("Opening File")
+text = open(os.path.dirname(__file__) + "/../../datasets/" + directory_name + "/" + corpus_name + ".txt", "r", encoding = 'utf-8')
 corpus = text.read()
 tokens = Tokenize(corpus)
-byte_pairs = PrepareBytePairs(tokens, pair_iterations)
+byte_pairs, merge_rules = GenerateRules(tokens, pair_iterations)
 
-with open(os.path.dirname(__file__) + "/../datasets/" + file_name + "-tokens.json", "w", encoding = 'utf-8') as f:
+with open(os.path.dirname(__file__) + "/../../output/" + directory_name + "/" + corpus_name + "-merge_rules.json", "w", encoding = 'utf-8') as f:
+	json.dump(merge_rules, f)
+
+with open(os.path.dirname(__file__) + "/../../output/" + directory_name + "/" + corpus_name + "-tokens.json", "w", encoding = 'utf-8') as f:
 	json.dump(tokens, f)
 
-with open(os.path.dirname(__file__) + "/../datasets/" + file_name + "-byte_pairs.json", "w", encoding = 'utf-8') as f:
+with open(os.path.dirname(__file__) + "/../../output/" + directory_name + "/" + corpus_name + "-byte_pairs.json", "w", encoding = 'utf-8') as f:
 	json.dump(byte_pairs, f)
